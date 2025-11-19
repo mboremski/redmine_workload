@@ -64,6 +64,8 @@ jobs:
       RAILS_ENV: test
       NAME: redmine_workload
     steps:
+      - name: Install svn
+        run: sudo apt-get update && sudo apt-get install -y subversion
       - name: Clone Redmine
         # Get the latest stable Redmine
         run: svn export http://svn.redmine.org/redmine/branches/5.0-stable/ redmine
