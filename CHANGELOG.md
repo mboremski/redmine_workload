@@ -5,6 +5,17 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 4.0.0 - 2026-02-06
+
+### Changed
+
+* Updated for Redmine 6.0.x / Rails 7.2 compatibility
+* Fixed Rails version comparisons to use Gem::Version
+* Updated database adapter detection for Rails 7.2
+* Updated ActiveRecord migrations to version 7.2
+* Removed deprecated `unloadable` from controllers and models
+* Fixed Ruby version comparison for PostgreSQL requirement
+
 ## 3.0.2 - 2023-07-24
 
 ### Deletes
