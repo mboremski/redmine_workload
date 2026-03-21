@@ -70,5 +70,31 @@ module RedmineWorkload
       get workloads_path(workload: { start_date: 'not-a-date' })
       assert_response :success
     end
+
+    test 'should get index without error when start_date is after last_day' do
+      manager = roles :roles_001
+      manager.add_permission! :view_all_workloads
+      log_user('jsmith', 'jsmith')
+
+      get workloads_path(workload: {
+                           first_day: '2026-01-01',
+                           last_day: '2026-01-31',
+                           start_date: '2026-06-01'
+                         })
+      assert_response :success
+    end
+
+    test 'should show warning when start_date is after last_day' do
+      manager = roles :roles_001
+      manager.add_permission! :view_all_workloads
+      log_user('jsmith', 'jsmith')
+
+      get workloads_path(workload: {
+                           first_day: '2026-01-01',
+                           last_day: '2026-01-31',
+                           start_date: '2026-06-01'
+                         })
+      assert flash[:warning].present?
+    end
   end
 end
