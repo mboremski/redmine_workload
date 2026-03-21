@@ -110,10 +110,10 @@ class WorkloadsController < ApplicationController
   end
 
   def sanitizeDateParameter(parameter, default)
-    if parameter.respond_to?(:to_date)
-      parameter.to_date
-    else
-      default
-    end
+    return default unless parameter.respond_to?(:to_date)
+
+    parameter.to_date
+  rescue Date::Error
+    default
   end
 end
