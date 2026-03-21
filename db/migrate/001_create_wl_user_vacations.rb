@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class CreateWlUserVacations < ActiveRecord::Migration[5.2]
+class CreateWlUserVacations < ActiveRecord::Migration[7.2]
   def change
     create_table :wl_user_vacations do |t|
       t.belongs_to :user, index: true, null: false
