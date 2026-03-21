@@ -43,5 +43,32 @@ module RedmineWorkload
 
       assert flash[:error].match(/Character encoding not allowed./)
     end
+
+    test 'should get index with invalid first_day date without raising an error' do
+      manager = roles :roles_001
+      manager.add_permission! :view_all_workloads
+      log_user('jsmith', 'jsmith')
+
+      get workloads_path(workload: { first_day: '2026-01-32' })
+      assert_response :success
+    end
+
+    test 'should get index with invalid last_day date without raising an error' do
+      manager = roles :roles_001
+      manager.add_permission! :view_all_workloads
+      log_user('jsmith', 'jsmith')
+
+      get workloads_path(workload: { last_day: '2026-13-01' })
+      assert_response :success
+    end
+
+    test 'should get index with invalid start_date without raising an error' do
+      manager = roles :roles_001
+      manager.add_permission! :view_all_workloads
+      log_user('jsmith', 'jsmith')
+
+      get workloads_path(workload: { start_date: 'not-a-date' })
+      assert_response :success
+    end
   end
 end
