@@ -13,11 +13,6 @@ Redmine::Plugin.register :redmine_workload do
   url 'https://github.com/xmera-circle/redmine_workload'
   requires_redmine version_or_higher: '6.1'
 
-  if RedmineWorkload.postgresql? && Gem::Version.new(RUBY_VERSION) < Gem::Version.new('3.1.0')
-    msg = "#{name} requires at least Ruby 3.1.0 when using postgresql database."
-    raise Redmine::PluginRequirementError, msg
-  end
-
   menu :top_menu,
        :WorkLoad,
        { controller: 'workloads', action: 'index' },
@@ -48,14 +43,6 @@ Redmine::Plugin.register :redmine_workload do
   permission :edit_national_holiday, wl_national_holiday: %i[create update destroy]
   permission :edit_user_vacations,   wl_user_vacations: %i[create update destroy]
   permission :edit_user_data,        wl_user_datas: :update
-end
-
-# Rails 6+ handles autoloading differently with Zeitwerk
-if Gem::Version.new(Rails.version) < Gem::Version.new('6.0')
-  plugin = Redmine::Plugin.find(:redmine_workload)
-  Rails.application.configure do
-    config.autoload_paths << "#{plugin.directory}/app/presenters"
-  end
 end
 
 class RedmineToolbarHookListener < Redmine::Hook::ViewListener

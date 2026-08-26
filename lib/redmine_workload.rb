@@ -11,17 +11,3 @@ require File.expand_path('redmine_workload/wl_issue_query', __dir__)
 require File.expand_path('redmine_workload/wl_issue_state', __dir__)
 require File.expand_path('redmine_workload/wl_user_data_finder', __dir__)
 require File.expand_path('redmine_workload/wl_user_data_defaults', __dir__)
-
-# Simple Rails related methods
-module RedmineWorkload
-  # Check whether Redmine is running postgresql database
-  def self.postgresql?
-    db_config = if ActiveRecord::Base.configurations.respond_to?(:configs_for)
-      ActiveRecord::Base.configurations.configs_for(env_name: Rails.env).first
-    else
-      ActiveRecord::Base.configurations[Rails.env]
-    end
-    adapter = db_config.respond_to?(:adapter) ? db_config.adapter : db_config['adapter']
-    adapter == 'postgresql'
-  end
-end

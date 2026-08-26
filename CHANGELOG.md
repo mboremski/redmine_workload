@@ -18,6 +18,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * Declared `requires_redmine version_or_higher: '6.1'`
 * CI now runs against Redmine 6.1-stable on Ruby 3.2 instead of 5.0-stable
 
+### Removed
+
+* Dead `Rails.version < '6'` branches in `init.rb` and `user_patch.rb`
+* Ruby version guard for PostgreSQL and `RedmineWorkload.postgresql?`,
+  unreachable since Redmine 6.1 requires Ruby >= 3.2
+
 ## 3.0.2 - 2023-07-24
 
 ### Deletes
