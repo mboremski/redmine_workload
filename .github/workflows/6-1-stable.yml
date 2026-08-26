@@ -1,5 +1,8 @@
 # This configuration is taken from Redmine DMSF plugin
 # and adapted to the needs of Redmine Workload plugin.
+#
+# Targets Redmine 6.1-stable (Rails 7.2). Plugin versions 4.x require
+# Redmine 6; for Redmine 5 use the 3.x line.
 # 
 # Copyright © 2023 Liane Hampe <liaham@xmera.de>
 # Copyright © 2022-23 Karel Pičman <karel.picman@kontron.com>
@@ -68,16 +71,16 @@ jobs:
         run: sudo apt-get update && sudo apt-get install -y subversion
       - name: Clone Redmine
         # Get the latest stable Redmine
-        run: svn export http://svn.redmine.org/redmine/branches/5.0-stable/ redmine
+        run: svn export http://svn.redmine.org/redmine/branches/6.1-stable/ redmine
       - name: Checkout plugin
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           path: redmine/plugins/${{ env.NAME }}
       - name: Install Ruby and gems
         uses: ruby/setup-ruby@v1
         with:
           bundler-cache: true
-          ruby-version: '3.1'
+          ruby-version: '3.2'
       - name: Setup database
         # Create the database
         run: | 
@@ -100,6 +103,7 @@ jobs:
           bundle exec rake db:migrate
           bundle exec rake redmine:plugins:migrate
           bundle exec rake redmine:load_default_data
+          bundle exec rake assets:precompile
         env:
           REDMINE_LANG: en
         working-directory: redmine
