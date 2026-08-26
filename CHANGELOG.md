@@ -9,12 +9,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-* Updated for Redmine 6.0.x / Rails 7.2 compatibility
+* Updated for Redmine 6.1.x / Rails 7.2 compatibility
 * Fixed Rails version comparisons to use Gem::Version
 * Updated database adapter detection for Rails 7.2
 * Updated ActiveRecord migrations to version 7.2
 * Removed deprecated `unloadable` from controllers and models
 * Fixed Ruby version comparison for PostgreSQL requirement
+* Declared `requires_redmine version_or_higher: '6.1'`
+* CI now runs against Redmine 6.1-stable on Ruby 3.2 instead of 5.0-stable
 
 ## 3.0.2 - 2023-07-24
 

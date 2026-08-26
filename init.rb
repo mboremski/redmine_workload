@@ -11,6 +11,7 @@ Redmine::Plugin.register :redmine_workload do
               'all their assigned issus on time.'
   version '4.0.0'
   url 'https://github.com/xmera-circle/redmine_workload'
+  requires_redmine version_or_higher: '6.1'
 
   if RedmineWorkload.postgresql? && Gem::Version.new(RUBY_VERSION) < Gem::Version.new('3.1.0')
     msg = "#{name} requires at least Ruby 3.1.0 when using postgresql database."
