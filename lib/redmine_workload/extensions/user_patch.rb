@@ -27,12 +27,3 @@ module RedmineWorkload
     end
   end
 end
-
-# Rails 6+ uses after_plugins_loaded hook instead
-if Gem::Version.new(Rails.version) < Gem::Version.new('6.0')
-  Rails.configuration.to_prepare do
-    unless User.included_modules.include?(RedmineWorkload::Extensions::UserPatch)
-      User.prepend RedmineWorkload::Extensions::UserPatch
-    end
-  end
-end

@@ -36,7 +36,7 @@
     display: inline-block;
 }
 
-legend {
+.controller-workloads legend {
     color: var(--anthracite);
 }
 

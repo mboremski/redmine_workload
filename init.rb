@@ -11,11 +11,7 @@ Redmine::Plugin.register :redmine_workload do
               'all their assigned issus on time.'
   version '4.0.0'
   url 'https://github.com/xmera-circle/redmine_workload'
-
-  if RedmineWorkload.postgresql? && Gem::Version.new(RUBY_VERSION) < Gem::Version.new('3.1.0')
-    msg = "#{name} requires at least Ruby 3.1.0 when using postgresql database."
-    raise Redmine::PluginRequirementError, msg
-  end
+  requires_redmine version_or_higher: '6.1'
 
   menu :top_menu,
        :WorkLoad,
@@ -49,17 +45,28 @@ Redmine::Plugin.register :redmine_workload do
   permission :edit_user_data,        wl_user_datas: :update
 end
 
-# Rails 6+ handles autoloading differently with Zeitwerk
-if Gem::Version.new(Rails.version) < Gem::Version.new('6.0')
-  plugin = Redmine::Plugin.find(:redmine_workload)
-  Rails.application.configure do
-    config.autoload_paths << "#{plugin.directory}/app/presenters"
-  end
-end
-
 class RedmineToolbarHookListener < Redmine::Hook::ViewListener
-  def view_layouts_base_html_head(_context)
+  # Controllers whose views need the plugin's assets.
+  WORKLOAD_CONTROLLERS = %w[
+    workloads
+    wl_user_datas
+    wl_user_vacations
+    wl_national_holiday
+  ].freeze
+
+  def view_layouts_base_html_head(context = {})
+    return '' unless workload_page?(context)
+
     javascript_include_tag('slides', plugin: :redmine_workload) +
       stylesheet_link_tag('style', plugin: :redmine_workload)
+  end
+
+  private
+
+  def workload_page?(context)
+    controller = context[:controller]
+    return false unless controller
+
+    WORKLOAD_CONTROLLERS.include?(controller.params[:controller].to_s)
   end
 end

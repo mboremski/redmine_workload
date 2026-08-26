@@ -10,6 +10,15 @@ module RedmineWorkload
              :users, :issue_statuses, :enumerations, :roles
 
     def setup
+      # Redmine >= 6.0 declares `fixtures :all` in its own test_helper, so every
+      # fixture file is loaded regardless of what a test class asks for. Among
+      # them is groups_users.yml, which makes users(:users_008) a member of two
+      # groups. Queries for "all users belonging to any group" therefore no
+      # longer return only the users generated below. Record what is already
+      # there before adding anything.
+      @fixture_group_member_ids =
+        Group.all.flat_map { |group| group.users.select(&:active?) }.map(&:id).uniq
+
       @group1 = Group.generate!
       @group2 = Group.generate!
       @group3 = Group.generate!
@@ -26,11 +35,19 @@ module RedmineWorkload
       @group_member_ids
     end
 
+    ##
+    # All users a global workload query may return: the ones generated in setup
+    # plus the group members that come from Redmine's own fixtures.
+    #
+    def all_group_member_ids
+      (@fixture_group_member_ids + @group_member_ids.flatten).uniq.sort
+    end
+
     test 'should return all users if the current user is admin' do
       current_user = User.generate!(admin: true)
       groups = WlGroupSelection.new(user: current_user, groups: [@group1.id, @group2.id, @group3.id])
       users = WlUserSelection.new(user: current_user, group_selection: groups)
-      assert_equal @group_member_ids.flatten.sort, users.allowed_to_display.map(&:id).sort
+      assert_equal all_group_member_ids, users.allowed_to_display.map(&:id).sort
     end
 
     test 'should return all active users when user has permission :view_all_workloads' do
@@ -40,7 +57,7 @@ module RedmineWorkload
       groups = WlGroupSelection.new(user: current_user, groups: [@group1.id, @group2.id, @group3.id])
 
       users = WlUserSelection.new(user: current_user, group_selection: groups)
-      expected = @group_member_ids.flatten.sort
+      expected = all_group_member_ids
       current = users.send(:all_users).map(&:id).sort
       assert_equal expected, current
     end
