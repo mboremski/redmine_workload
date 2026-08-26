@@ -46,8 +46,27 @@ Redmine::Plugin.register :redmine_workload do
 end
 
 class RedmineToolbarHookListener < Redmine::Hook::ViewListener
-  def view_layouts_base_html_head(_context)
+  # Controllers whose views need the plugin's assets.
+  WORKLOAD_CONTROLLERS = %w[
+    workloads
+    wl_user_datas
+    wl_user_vacations
+    wl_national_holiday
+  ].freeze
+
+  def view_layouts_base_html_head(context = {})
+    return '' unless workload_page?(context)
+
     javascript_include_tag('slides', plugin: :redmine_workload) +
       stylesheet_link_tag('style', plugin: :redmine_workload)
+  end
+
+  private
+
+  def workload_page?(context)
+    controller = context[:controller]
+    return false unless controller
+
+    WORKLOAD_CONTROLLERS.include?(controller.params[:controller].to_s)
   end
 end
