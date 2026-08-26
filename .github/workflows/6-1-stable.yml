@@ -114,6 +114,14 @@ jobs:
           bundle exec rake redmine:plugins:test:units
           bundle exec rake redmine:plugins:test:functionals
           bundle exec rake redmine:plugins:test:integration
+      - name: Archive test.log
+        # Keep the log so failing runs can be diagnosed
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: "test_${{matrix.engine}}.log"
+          path: redmine/log/test.log
+          if-no-files-found: ignore
       - name: Cleanup
         # Rollback plugin's changes to the database
         # Stop the database engine
