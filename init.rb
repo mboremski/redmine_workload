@@ -9,11 +9,11 @@ Redmine::Plugin.register :redmine_workload do
   description 'This is a plugin for Redmine, originally developed by Rafael Calleja. It ' \
               'displays the estimated number of hours users and groups have to work to finish ' \
               'all their assigned issus on time.'
-  version '3.0.2'
+  version '4.0.0'
   url 'https://github.com/xmera-circle/redmine_workload'
 
-  if RedmineWorkload.postgresql? && RUBY_VERSION <= '3.1'
-    msg = "#{name} requires at least Ruby 3.1.z when using postgresql database."
+  if RedmineWorkload.postgresql? && Gem::Version.new(RUBY_VERSION) < Gem::Version.new('3.1.0')
+    msg = "#{name} requires at least Ruby 3.1.0 when using postgresql database."
     raise Redmine::PluginRequirementError, msg
   end
 
@@ -49,7 +49,8 @@ Redmine::Plugin.register :redmine_workload do
   permission :edit_user_data,        wl_user_datas: :update
 end
 
-if Rails.version < '6'
+# Rails 6+ handles autoloading differently with Zeitwerk
+if Gem::Version.new(Rails.version) < Gem::Version.new('6.0')
   plugin = Redmine::Plugin.find(:redmine_workload)
   Rails.application.configure do
     config.autoload_paths << "#{plugin.directory}/app/presenters"

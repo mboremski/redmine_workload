@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class CreateWlNationalHolidays < ActiveRecord::Migration[5.2]
+class CreateWlNationalHolidays < ActiveRecord::Migration[7.2]
   def change
     create_table  :wl_national_holidays do |t|
       t.date      :start, null: false
