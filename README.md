@@ -114,6 +114,12 @@ are **not** configured here: they are read from Redmine's own
 `Administration -> Settings -> Issue tracking -> Non-working days`, so that the
 workload calculation and the rest of Redmine agree on which days are worked.
 
+:warning: Changing the working days does not show up in the workload view right
+away. `WlDateTools.working_days_in_time_span` caches its result per user and
+time span for up to 12 hours. Restart Redmine or clear its cache
+(`rake tmp:cache:clear`, or remove `tmp/cache`) to apply the change
+immediately. The same applies to global holidays and vacations.
+
 2. In the roles section of the administration area, the plugin adds new permissions as described below.
 There is no need to configure this plugin on project level.
 

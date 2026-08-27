@@ -6,6 +6,8 @@
 
 	<p><em class="info"><%= l(:workload_settings_general_workdays_from_core) %></em></p>
 	<p><%= link_to l(:setting_non_working_week_days), settings_path(tab: 'issues') %></p>
+
+	<p><em class="info icon icon-warning"><%= sprite_icon('warning', l(:workload_settings_general_workdays_cache_hint)) %></em></p>
 </fieldset>
 
 <fieldset class="box tabular">	
