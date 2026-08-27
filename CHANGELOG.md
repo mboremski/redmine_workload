@@ -5,7 +5,7 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## 4.0.0 - 2026-02-06
+## 4.0.0 - 2026-08-27
 
 ### Changed
 
@@ -17,6 +17,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * Fixed Ruby version comparison for PostgreSQL requirement
 * Declared `requires_redmine version_or_higher: '6.1'`
 * CI now runs against Redmine 6.1-stable on Ruby 3.2 instead of 5.0-stable
+* Icons are rendered with `sprite_icon` instead of the legacy icon font
+  classes, so they follow the active theme
+* The plugin's javascript and stylesheet are no longer injected into every
+  Redmine page, only into the plugin's own views
+* Rubocop targets Ruby 3.2, the lowest version Redmine 6.1 allows
 
 ### Fixed
 
@@ -29,6 +34,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   environment is loaded, where `Rails.root` does not exist
 * `WlUserSelectionTest` accounts for Redmine 6's `fixtures :all`, which makes
   `users(:users_008)` a member of two groups
+* An unscoped `legend` rule in the plugin's stylesheet restyled the legend of
+  every fieldset in the whole Redmine installation; it is now scoped to the
+  plugin's own views
 
 ### Removed
 
