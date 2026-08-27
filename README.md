@@ -31,7 +31,7 @@ The encoding options are the same as on the page itself and might depend on your
 
 ### workday settings
 
-Workday settings are fixed now (see [#27](https://github.com/xmera-circle/redmine_workload/issues/27)) but lead to restrictions for PostgreSQL user.
+Workday settings were fixed in this version (see [#27](https://github.com/xmera-circle/redmine_workload/issues/27)) but led to restrictions for PostgreSQL user. Since 4.1.0 the working days come from Redmine's own configuration, see below.
 
  :warning: **PostgreSQL requires Ruby 3.1 or newer.** Redmine 6.1 requires Ruby 3.2
 or newer anyway, so this is no longer a separate constraint for the 4.x line.
@@ -109,7 +109,10 @@ Please refer to [redmine.org -> Plugins](https://www.redmine.org/projects/redmin
 There are three places where this plugin might be configured:
 
 1. In the plugin settings, available in the administration area under `plugins`.
-You can configure working days, thresholds here and set global holidays.
+You can configure thresholds here and set global holidays. The working days
+are **not** configured here: they are read from Redmine's own
+`Administration -> Settings -> Issue tracking -> Non-working days`, so that the
+workload calculation and the rest of Redmine agree on which days are worked.
 
 2. In the roles section of the administration area, the plugin adds new permissions as described below.
 There is no need to configure this plugin on project level.
