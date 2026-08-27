@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class CreateWlUserData < ActiveRecord::Migration[5.2]
+class CreateWlUserData < ActiveRecord::Migration[7.2]
   def change
     create_table :wl_user_datas do |t|
       t.belongs_to :user, index: true, null: false

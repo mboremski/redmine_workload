@@ -1,6 +1,6 @@
 # Workload Plugin for Redmine
 
-![Redmine Workload Version](https://img.shields.io/badge/Redmine_Plugin-v3.0.2-red) ![Redmine Version](https://img.shields.io/badge/Redmine-v5.0.z-blue) ![Language Support](https://img.shields.io/badge/Languages-en,_de,_fr,_es,_it-green) ![Version Stage](https://img.shields.io/badge/Stage-release-important) ![ci](https://github.com/xmera-circle/redmine_workload/actions/workflows/5-0-stable.yml/badge.svg)
+![Redmine Workload Version](https://img.shields.io/badge/Redmine_Plugin-v4.0.0-red) ![Redmine Version](https://img.shields.io/badge/Redmine-v6.1.z-blue) ![Language Support](https://img.shields.io/badge/Languages-en,_de,_fr,_es,_it-green) ![Version Stage](https://img.shields.io/badge/Stage-release-important) ![ci](https://github.com/xmera-circle/redmine_workload/actions/workflows/6-1-stable.yml/badge.svg)
 
 A complete rewrite of the original workload-plugin from Rafael Calleja.
 The plugin calculates how much work each user would have to do per day in order to hit the deadlines for all his issues.
@@ -33,7 +33,19 @@ The encoding options are the same as on the page itself and might depend on your
 
 Workday settings are fixed now (see [#27](https://github.com/xmera-circle/redmine_workload/issues/27)) but lead to restrictions for PostgreSQL user.
 
- :warning: **With PostgreSQL installed you need to run Ruby 3.1.z!**
+ :warning: **PostgreSQL requires Ruby 3.1 or newer.** Redmine 6.1 requires Ruby 3.2
+or newer anyway, so this is no longer a separate constraint for the 4.x line.
+
+## New Features in Version 4.0.0
+
+### support of Redmine 6
+
+Version 4.0.0 supports Redmine 6.1.z and is **not** backward compatible: the
+database migrations are on `ActiveRecord::Migration[7.2]`, which Redmine 5
+(Rails 6.1) cannot load. Installations on Redmine 5 stay on the 3.x line.
+
+Redmine 6.0.z ships the same Rails 7.2 and is likely to work, but it is not
+covered by the test workflow and therefore not claimed as supported.
 
 ## New Features in Version 2.2.0
 

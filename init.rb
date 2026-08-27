@@ -9,13 +9,9 @@ Redmine::Plugin.register :redmine_workload do
   description 'This is a plugin for Redmine, originally developed by Rafael Calleja. It ' \
               'displays the estimated number of hours users and groups have to work to finish ' \
               'all their assigned issus on time.'
-  version '3.0.2'
+  version '4.0.0'
   url 'https://github.com/xmera-circle/redmine_workload'
-
-  if RedmineWorkload.postgresql? && RUBY_VERSION <= '3.1'
-    msg = "#{name} requires at least Ruby 3.1.z when using postgresql database."
-    raise Redmine::PluginRequirementError, msg
-  end
+  requires_redmine version_or_higher: '6.1'
 
   menu :top_menu,
        :WorkLoad,
@@ -49,16 +45,28 @@ Redmine::Plugin.register :redmine_workload do
   permission :edit_user_data,        wl_user_datas: :update
 end
 
-if Rails.version < '6'
-  plugin = Redmine::Plugin.find(:redmine_workload)
-  Rails.application.configure do
-    config.autoload_paths << "#{plugin.directory}/app/presenters"
-  end
-end
-
 class RedmineToolbarHookListener < Redmine::Hook::ViewListener
-  def view_layouts_base_html_head(_context)
+  # Controllers whose views need the plugin's assets.
+  WORKLOAD_CONTROLLERS = %w[
+    workloads
+    wl_user_datas
+    wl_user_vacations
+    wl_national_holiday
+  ].freeze
+
+  def view_layouts_base_html_head(context = {})
+    return '' unless workload_page?(context)
+
     javascript_include_tag('slides', plugin: :redmine_workload) +
       stylesheet_link_tag('style', plugin: :redmine_workload)
+  end
+
+  private
+
+  def workload_page?(context)
+    controller = context[:controller]
+    return false unless controller
+
+    WORKLOAD_CONTROLLERS.include?(controller.params[:controller].to_s)
   end
 end

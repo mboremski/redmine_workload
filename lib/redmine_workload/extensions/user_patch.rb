@@ -27,11 +27,3 @@ module RedmineWorkload
     end
   end
 end
-
-if Rails.version < '6'
-  Rails.configuration.to_prepare do
-    unless User.included_modules.include?(RedmineWorkload::Extensions::UserPatch)
-      User.prepend RedmineWorkload::Extensions::UserPatch
-    end
-  end
-end

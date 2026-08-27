@@ -1,8 +1,6 @@
 # frozen_string_literal: true
 
 class WorkloadsController < ApplicationController
-  unloadable
-
   helper :gantt
   helper :issues
   helper :projects
@@ -32,6 +30,12 @@ class WorkloadsController < ApplicationController
     # Make sure that last_day is at most 12 months after first_day to prevent
     # long running times
     @last_day = [(@first_day >> 12) - 1, @last_day].min
+
+    # Make sure that today is not after last_day to prevent a crash in the
+    # workload calculation (today would be outside the time span)
+    @today_capped = @today > @last_day
+    @today = [@today, @last_day].min
+
     @time_span_to_display = @first_day..@last_day
 
     if @date_check
@@ -56,6 +60,7 @@ class WorkloadsController < ApplicationController
     respond_to do |format|
       format.html do
         flash.now[:error] = l(:error_date_setting) unless @date_check
+        flash.now[:warning] = l(:warning_today_capped_to_last_day) if @today_capped
         render action: :index
       end
 
@@ -110,10 +115,10 @@ class WorkloadsController < ApplicationController
   end
 
   def sanitizeDateParameter(parameter, default)
-    if parameter.respond_to?(:to_date)
-      parameter.to_date
-    else
-      default
-    end
+    return default unless parameter.respond_to?(:to_date)
+
+    parameter.to_date
+  rescue Date::Error
+    default
   end
 end

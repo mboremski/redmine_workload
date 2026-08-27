@@ -5,6 +5,45 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 4.0.0 - 2026-08-27
+
+### Changed
+
+* Updated for Redmine 6.1.x / Rails 7.2 compatibility
+* Fixed Rails version comparisons to use Gem::Version
+* Updated database adapter detection for Rails 7.2
+* Updated ActiveRecord migrations to version 7.2
+* Removed deprecated `unloadable` from controllers and models
+* Fixed Ruby version comparison for PostgreSQL requirement
+* Declared `requires_redmine version_or_higher: '6.1'`
+* CI now runs against Redmine 6.1-stable on Ruby 3.2 instead of 5.0-stable
+* Icons are rendered with `sprite_icon` instead of the legacy icon font
+  classes, so they follow the active theme
+* The plugin's javascript and stylesheet are no longer injected into every
+  Redmine page, only into the plugin's own views
+* Rubocop targets Ruby 3.2, the lowest version Redmine 6.1 allows
+
+### Fixed
+
+* HTTP 500 when an invalid date such as `2026-01-32` was entered in a workload
+  filter; invalid input now falls back to the default value (#41)
+* HTTP 500 when the 'Use as today' date was set beyond the last day of the
+  displayed time span; the date is capped and a flash warning is shown (#40)
+* `test/test_helper.rb` no longer uses `Rails.root` at load time. Rails 7.2 runs
+  plugin tests in a separate process that requires the test files before the
+  environment is loaded, where `Rails.root` does not exist
+* `WlUserSelectionTest` accounts for Redmine 6's `fixtures :all`, which makes
+  `users(:users_008)` a member of two groups
+* An unscoped `legend` rule in the plugin's stylesheet restyled the legend of
+  every fieldset in the whole Redmine installation; it is now scoped to the
+  plugin's own views
+
+### Removed
+
+* Dead `Rails.version < '6'` branches in `init.rb` and `user_patch.rb`
+* Ruby version guard for PostgreSQL and `RedmineWorkload.postgresql?`,
+  unreachable since Redmine 6.1 requires Ruby >= 3.2
+
 ## 3.0.2 - 2023-07-24
 
 ### Deletes

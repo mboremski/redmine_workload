@@ -38,6 +38,6 @@
       <%= label_tag :workload_groups, l(:workload_show_filter_group) %>
 	  <%= select_tag :workload_groups, group_options_for_select(@groups&.allowed_to_display, @groups&.selected), :name => 'workload[groups][]', :multiple => true, :onchange => "this.form.workload_users.selectedIndex=-1;" %>
     </div>
-    <%= link_to_function l(:button_apply), 'jQuery("#filter_form").submit()', :class => 'apply icon icon-checked' %>
+    <%= link_to_function sprite_icon('checked', l(:button_apply)), 'jQuery("#filter_form").submit()', :class => 'apply icon icon-checked' %>
   </fieldset>
 <% end %>
